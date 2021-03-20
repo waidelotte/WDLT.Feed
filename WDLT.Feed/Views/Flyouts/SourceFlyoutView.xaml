@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="WDLT.Feed.Views.Flyouts.SourceFlyoutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WDLT.Feed.Views.Flyouts"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vms="clr-namespace:WDLT.Feed.ViewModels.Flyouts"
+             xmlns:s="https://github.com/canton7/Stylet"
+             d:DataContext="{d:DesignInstance vms:SourceFlyoutViewModel}"
+             Background="{DynamicResource PrimaryHueLightBrush}"
+             mc:Ignorable="d">
+    <DockPanel Margin="10">
+        <DockPanel LastChildFill="True" DockPanel.Dock="Top">
+            <Button Content="OK" 
+                    DockPanel.Dock="Right"
+                    Height="{Binding ElementName=SourceTextBox, Path=ActualHeight}"
+                    Command="{s:Action Ok}" 
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                    materialDesign:ButtonProgressAssist.Value="-1"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsLoading}"/>
+            <TextBox
+                Name="SourceTextBox"
+                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                BorderBrush="{DynamicResource PrimaryHueLightForegroundBrush}"
+                Background="White"
+                AcceptsReturn="False"
+                DockPanel.Dock="Left"
+                TextWrapping="NoWrap"
+                Margin="0 0 10 0"
+                MinWidth="200"
+                Text="{Binding SourceRaw, UpdateSourceTrigger=PropertyChanged}"
+                materialDesign:ValidationAssist.UsePopup="True"
+                materialDesign:ValidationAssist.OnlyShowOnFocus="False"
+                materialDesign:ValidationAssist.FontSize="11"
+                materialDesign:HintAssist.Hint="Enter the URL"/>
+        </DockPanel>
+        <TextBlock Text="{Binding ErrorMessage}" Margin="0 5 0 0" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" DockPanel.Dock="Top" Foreground="{DynamicResource ValidationErrorBrush}" Style="{StaticResource MaterialDesignButtonTextBlock}" HorizontalAlignment="Center"/>
+    </DockPanel>
+</UserControl>

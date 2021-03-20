@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="WDLT.Feed.Views.Dialogs.BlacklistDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dialogs="clr-namespace:WDLT.Feed.ViewModels.Dialogs"
+             xmlns:s="https://github.com/canton7/Stylet"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{DynamicResource MaterialDesignBackground}"
+             d:DataContext="{d:DesignInstance dialogs:BlacklistDialogViewModel}"
+             mc:Ignorable="d">
+    <DockPanel Margin="20">
+        <TextBlock Text="Enter the word" DockPanel.Dock="Top" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignBody1TextBlock}"/>
+        <DockPanel DockPanel.Dock="Top">
+            <TextBox MinWidth="150" MaxWidth="200" TextWrapping="NoWrap" MaxLength="35" Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left"/>
+            <Button Content="Add" IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}" Command="{s:Action Ok}" DockPanel.Dock="Left"/>
+        </DockPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" MaxHeight="200" Margin="0 20 0 0" Visibility="{Binding Blacklist.Count, Converter={StaticResource NotZeroToVisibilityConverter}}">
+            <ItemsControl ItemsSource="{Binding Blacklist}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Button Command="{s:Action RemoveWord}" CommandParameter="{Binding}" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="MaterialDesignIconForegroundButton" Height="15" Width="15" Margin="0 0 5 0">
+                                <materialDesign:PackIcon Height="15" Width="15" Kind="RemoveCircle" />
+                            </Button>
+                            <TextBlock Text="{Binding Word}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

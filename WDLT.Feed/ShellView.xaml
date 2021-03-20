@@ -1,0 +1,63 @@
+﻿<mah:MetroWindow x:Class="WDLT.Feed.ShellView"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:WDLT.Feed"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:s="https://github.com/canton7/Stylet"
+                 mc:Ignorable="d"
+                 MinHeight="250"
+                 MinWidth="350"
+                 SaveWindowPosition="True"
+                 ShowIconOnTitleBar="True"
+                 NonActiveWindowTitleBrush="{DynamicResource PrimaryHueDarkBrush}"
+                 NonActiveBorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                 RightWindowCommandsOverlayBehavior="Never"
+                 xmlns:p="clr-namespace:WDLT.Feed.Properties"
+                 Height="{Binding Source={x:Static p:Settings.Default}, Path=AppWindowHeight, Mode=TwoWay}"
+                 Width="{Binding Source={x:Static p:Settings.Default}, Path=AppWindowWidth, Mode=TwoWay}"
+                 ResizeMode="CanResize"
+                 xmlns:vms="clr-namespace:WDLT.Feed"
+                 x:Name="ShellWindow"
+                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                 xmlns:dialogs="clr-namespace:WDLT.Feed.ViewModels.Dialogs"
+                 d:DataContext="{d:DesignInstance vms:ShellViewModel}">
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands ShowLastSeparator="True">
+            <Button ToolTip="Screenshot" Command="{s:Action Screenshot}" CommandParameter="{Binding ElementName=ShellWindow}">
+                <materialDesign:PackIcon Kind="PhotoCamera" />
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+    <mah:MetroWindow.Flyouts>
+        <mah:FlyoutsControl ItemsSource="{Binding Flyouts}" />
+    </mah:MetroWindow.Flyouts>
+    <materialDesign:DialogHost OpenDialogCommandDataContextSource="DialogHostInstance" CloseOnClickAway="True" CloseOnClickAwayParameter="{x:Null}" SnackbarMessageQueue="{Binding ElementName=TimedSnackbar, Path=MessageQueue}">
+        <Grid IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+            <mah:MetroAnimatedSingleRowTabControl ItemsSource="{Binding Items}" SelectedItem="{Binding ActiveItem}" DisplayMemberPath="DisplayName" mah:HeaderedControlHelper.HeaderFontSize="14" mah:TabControlHelper.Underlined="TabPanel" >
+                <mah:MetroAnimatedSingleRowTabControl.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl s:View.Model="{Binding}" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" IsTabStop="False"/>
+                    </DataTemplate>
+                </mah:MetroAnimatedSingleRowTabControl.ContentTemplate>
+            </mah:MetroAnimatedSingleRowTabControl>
+            <materialDesign:Snackbar IsActive="{Binding IsSnackbarOpen}"
+                                     x:Name="TimedSnackbar"
+                                     HorizontalContentAlignment="Center"
+                                     HorizontalAlignment="Center"
+                                     MessageQueue="{Binding SnackbarMessageQueue}"
+                                     Background="{DynamicResource SecondaryHueMidBrush}"
+                                     Foreground="{DynamicResource SecondaryHueMidForegroundBrush}">
+            </materialDesign:Snackbar>
+            <materialDesign:Snackbar IsActive="{Binding IsSnackbarOpen}"
+                                     x:Name="MainSnackbar"
+                                     HorizontalContentAlignment="Center"
+                                     HorizontalAlignment="Center"
+                                     Background="{DynamicResource SecondaryHueMidBrush}"
+                                     Foreground="{DynamicResource SecondaryHueMidForegroundBrush}">
+                <materialDesign:SnackbarMessage Content="{Binding SnackbarText}" HorizontalAlignment="Center"/>
+            </materialDesign:Snackbar>
+        </Grid>
+    </materialDesign:DialogHost>
+</mah:MetroWindow>
